@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
-
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-input/iron-input.html">
 <!--
 `innocent-spin`
 The spinner components for the range of defined values.
@@ -10,11 +11,16 @@ The spinner components for the range of defined values.
 <dom-module id="innocent-spin">
   <template>
     <style>
-      :host {
+       :host {
         display: block;
       }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+    <div>
+      <input id="current_val"></input>
+      <paper-button id="backward_btn" raised on-click="_backward">Backward Button</paper-button>
+      <paper-button id="forward_btn" raised on-click="_forward">Forward Button</paper-button>
+
+    </div>
   </template>
 
   <script>
@@ -23,10 +29,47 @@ The spinner components for the range of defined values.
       is: 'innocent-spin',
 
       properties: {
-        prop1: {
-          type: String,
-          value: 'innocent-spin',
+        step: {
+          type: Number,
+          value: 1,
         },
+        start: {
+          type: Number,
+          value: 0,
+        },
+        min: {
+          type: Number,
+          value: -99,
+        },
+        max: {
+          type: Number,
+          value: 99,
+        },
+      },
+      attached: function () {
+        //console.log('attached');
+        this.$.current_val.value = this.start;
+      }, 
+      /**
+      * Get the current value displayed in input.
+      * @type String
+      */
+      current: function() {
+        return this.$.current_val.val;
+      },
+      _backward: function () {
+        //console.log('Backward!');
+        var current = +this.$.current_val.value;
+        if (current > this.min) {
+          this.$.current_val.value = current - this.step;
+        }
+      },
+      _forward: function () {
+        //console.log('Forward');
+        var current = +this.$.current_val.value;
+        if (current < this.max) {
+          this.$.current_val.value = current + this.step;
+        }
       },
 
     });
